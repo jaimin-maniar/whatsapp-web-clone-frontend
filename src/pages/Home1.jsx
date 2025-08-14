@@ -126,39 +126,35 @@ useEffect(() => {
 
   return (
     <div className="h-screen flex flex-col md:flex-row overflow-hidden"> {/* Added flex-col and md:flex-row */}
-      <div className="transform transition-transform duration-300 ease-out hidden md:flex">
-        <ChatSidebar active={active} setActive={setActive} selectChat={selectChat} chats={chats} className="hidden md:flex"/>
-      </div>
+      <ChatSidebar active={active} setActive={setActive} selectChat={selectChat} chats={chats} className="hidden md:flex"/> {/* Added className */}
 
       {active === "messages" ? (
         <>
          {/* Chat List */}
 <div
   style={{ width: `${chatListWidth}px` }}
-  className={`md:block ${activeWaId ? 'hidden' : 'block'} ${activeWaId ? '' : 'flex-1'} transform transition-all duration-300 ease-in-out`} // Added smooth transitions
+  className={`md:block ${activeWaId ? 'hidden' : 'block'} ${activeWaId ? '' : 'flex-1'}`} // Hide on mobile when chat is active, otherwise full width. Remove flex-1 on desktop when chatlist is visible
 >
-  <div className="animate-fadeIn">
-    <ChatList
-      chats={chats}
-      onSelect={selectChat}
-      activeWaId={activeWaId}
-      myNumber={myNumber}
-      setActiveContactName={setActiveContactName}
-      setBottomNavBarActive={setBottomNavBarActive}
-    />
-  </div>
+  <ChatList
+    chats={chats}
+    onSelect={selectChat}
+    activeWaId={activeWaId}
+    myNumber={myNumber}
+    setActiveContactName={setActiveContactName}
+    setBottomNavBarActive={setBottomNavBarActive}
+  />
 </div>
 
 {/* Divider */}
 <div
   ref={dividerRef}
   onMouseDown={() => setIsDragging(true)}
-  className="w-1 bg-gray-300 cursor-col-resize hover:bg-gray-400 hidden md:block transition-colors duration-200 ease-in-out hover:shadow-lg" // Added hover animation
+  className="w-1 bg-gray-300 cursor-col-resize hover:bg-gray-400 hidden md:block" // Hide on mobile, show on desktop
   style={{ userSelect: "none" }} // prevent text selection while dragging
 />
 
           {activeWaId ? (
-            <div className="flex flex-col flex-1 transform transition-all duration-300 ease-in-out animate-slideInRight">
+            <div className="flex flex-col flex-1">
               <ChatWindow
                 selectedMsg={selectedMsg}
                 setSelectedMsg={setSelectedMsg}
@@ -166,18 +162,14 @@ useEffect(() => {
                 contactName={activeContactName}
                 myNumber={myNumber}
                 activeWaId={activeWaId}
-                onBack={handleBackToChatList}
-                setBottomNavBarActive={setBottomNavBarActive} // Pass the onBack function
+                onBack={handleBackToChatList} // Pass the onBack function
               />
              
             </div>
           ) : (
-            <div className="flex-1 items-center justify-center text-gray-500 hidden md:flex animate-pulse"> {/* Added pulse animation */} 
-              <div className="text-center transform transition-all duration-500 ease-in-out hover:scale-105">
-                <div className="text-6xl mb-4 opacity-20">💬</div>
-                <div className="text-lg font-medium">Select a chat to start</div>
-                <div className="text-sm opacity-60 mt-2">Choose a conversation from the sidebar</div>
-              </div>
+            <div className="flex-1 items-center justify-center text-gray-500 hidden md:flex"> {/* Hide on mobile when no chat selected */} 
+              Select a chat to start
+
             </div>
           )}
         </>
@@ -186,7 +178,7 @@ useEffect(() => {
          {/* Status List */}
 <div
   style={{ width: `${statusListWidth}px` }}
-  className={`${activeWaId ? 'hidden' : 'block'} flex-1 transform transition-all duration-300 ease-in-out animate-fadeIn`} // Added smooth transitions and fade in
+  className={`${activeWaId ? 'hidden' : 'block'} flex-1`} // Show on all screens unless a chat is active
 >
   <StatusList statusListWidth={statusListWidth} /> {/* Pass statusListWidth */}
 </div>
@@ -195,71 +187,18 @@ useEffect(() => {
 <div
   ref={statusDividerRef}
   onMouseDown={() => setIsStatusDragging(true)}
-  className="w-1 bg-gray-300 cursor-col-resize hover:bg-gray-400 hidden md:block transition-colors duration-200 ease-in-out hover:shadow-lg"
+  className="w-1 bg-gray-300 cursor-col-resize hover:bg-gray-400 hidden md:block"
   style={{ userSelect: "none" }}
 />
 
         </>
       ) : active === "meta" ? (
-        <div className="flex flex-1 items-center justify-center text-gray-500 animate-fadeIn">
-          <div className="text-center transform transition-all duration-500 ease-in-out hover:scale-105">
-            <div className="text-6xl mb-4 opacity-20">🔧</div>
-            <div className="text-lg font-medium">Meta content here</div>
-            <div className="text-sm opacity-60 mt-2">Feature coming soon</div>
-          </div>
+        <div className="flex flex-1 items-center justify-center text-gray-500">
+          Meta content here
         </div>
       ) : null}
-      
-      <div className={`transform transition-all duration-300 ease-in-out ${bottomNavBarActive ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}`}>
-        {bottomNavBarActive && <BottomNavBar active={active} setActive={setActive} />}
-      </div>
-
-      <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes slideInRight {
-          from {
-            opacity: 0;
-            transform: translateX(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        @keyframes slideInLeft {
-          from {
-            opacity: 0;
-            transform: translateX(-30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        .animate-fadeIn {
-          animation: fadeIn 0.3s ease-out;
-        }
-
-        .animate-slideInRight {
-          animation: slideInRight 0.3s ease-out;
-        }
-
-        .animate-slideInLeft {
-          animation: slideInLeft 0.3s ease-out;
-        }
-      `}</style>
+      {bottomNavBarActive && <BottomNavBar active={active} setActive={setActive}  />} {/* Render the new component */}
     </div>
   );
 }
+

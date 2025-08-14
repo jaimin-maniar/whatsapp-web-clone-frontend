@@ -2,7 +2,7 @@ import MessageBubble from "./MessageBubble";
 import { FaUser } from "react-icons/fa6";
 import SendMessageBox from "./SendMessageBox";
 
-export default function ChatWindow({ messages, contactName, myNumber, setSelectedMsg,  activeWaId, onBack }) { // Added onBack prop
+export default function ChatWindow({ messages, contactName, myNumber, setSelectedMsg,  activeWaId, onBack, setBottomNavBarActive }) { // Added onBack prop
   // Find my WA business number from an outgoing message
  
     
@@ -12,7 +12,7 @@ export default function ChatWindow({ messages, contactName, myNumber, setSelecte
       {/* Header */}
       <div className="bg-gray-50 p-4 border-b border-gray-200 flex items-center space-x-3">
         {/* Back Button for Mobile */}
-        <button onClick={onBack} className="md:hidden p-2 mr-2"> {/* Added back button */}
+        <button onClick={() => {onBack(); setBottomNavBarActive(true)}} className="md:hidden p-2 mr-2"> {/* Added back button */}
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
           </svg>
@@ -58,8 +58,8 @@ export default function ChatWindow({ messages, contactName, myNumber, setSelecte
       const isFirstInGroup = !prevMsg || prevMsg.from !== msg.from;
       return (
         <MessageBubble
-          onClick={() => {setSelectedMsg(msg); console.log("Message clicked")} }
-          key={msg._id}
+          onClick={() => {setSelectedMsg(msg)} }
+          key={`${msg._id}-${Date.now()}`}
           msg={msg}
           myNumber={myNumber}
           isFirstInGroup={isFirstInGroup}
@@ -72,11 +72,10 @@ export default function ChatWindow({ messages, contactName, myNumber, setSelecte
 
     
     <SendMessageBox
-                    activeWaId={activeWaId}
-                    contactName={contactName}
-                    myNumber={myNumber}
-                    
-                  />
+      activeWaId={activeWaId}
+      contactName={contactName}
+      myNumber={myNumber}              
+    />
     </div>
   );
 }

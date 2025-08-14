@@ -4,7 +4,7 @@ import { IoCheckmarkDoneOutline } from "react-icons/io5";
 import { IoCheckmarkOutline } from "react-icons/io5";
 import { FaUser } from "react-icons/fa6";
 import { useEffect } from "react";
-export default function ChatList({ chats, onSelect, activeWaId, myNumber, setActiveContactName }) {
+export default function ChatList({ chats, onSelect, activeWaId, myNumber, setActiveContactName, setBottomNavBarActive }) {
   // Helper function to get message status icon
   const getMessageStatusIcon = (status) => {
     switch (status) {
@@ -71,14 +71,14 @@ export default function ChatList({ chats, onSelect, activeWaId, myNumber, setAct
         </div>
       {chats?.map((chat) => {
         const isOutgoing = isOutgoingMessage(chat);
-        console.log("CHATTTTT", chat
-
-        )
         
         return (
           <div
             key={chat._id.$oid || chat._id}
-            onClick={() => onSelect(chat._id)}
+            onClick={() => {
+              onSelect(chat._id)
+              setBottomNavBarActive(false)
+            }}
             className={`px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors duration-150 ${
               activeWaId === chat._id ? "bg-gray-100" : ""
             }`}

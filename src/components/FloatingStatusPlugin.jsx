@@ -67,14 +67,16 @@ export default function FloatingStatusPlugin({ selectedMsg }) {
   };
 
   return (
-    <Draggable nodeRef={nodeRef}>
+    <Draggable nodeRef={nodeRef} className="relative">
       <div
         ref={nodeRef}
         style={{
           position: "fixed",
           top: 100,
           right: 50,
-          background: "#fff",
+          background: "black",
+          opacity: "0.7",
+          color: "white"  ,
           border: "1px solid #ccc",
           padding: "10px",
           borderRadius: "8px",
@@ -82,19 +84,19 @@ export default function FloatingStatusPlugin({ selectedMsg }) {
           zIndex: 9999
         }}
       >
-        <h4>Status Sender</h4>
-
+        <h4 className="mb-1 text-lg bg-white text-black font-bold opacity-100 rounded-full px-4 flex items-center justify-center">Status Sender</h4>
         <select
           value={status}
           onChange={(e) => setStatus(e.target.value)}
-          style={{ width: "100%", marginBottom: "10px" }}
+          style={{ width: "100%", marginBottom: "10px", color: "white", background:"black", opacity:"0.7" }}
+          className="border rounded-full px-2"
         >
           <option value="sent">Sent</option>
           <option value="delivered">Delivered</option>
           <option value="read">Read</option>
         </select>
 
-        <button onClick={sendStatusPayload} disabled={!selectedMsg}>
+        <button onClick={sendStatusPayload} disabled={!selectedMsg} className="border rounded-full px-4">
           Send Status
         </button>
 
